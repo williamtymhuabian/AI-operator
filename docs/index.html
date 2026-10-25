@@ -158,6 +158,40 @@ td.best{color:var(--c5);font-weight:700}
 .chips span{font-size:13px;font-family:var(--mono);border:1px solid var(--line);
   border-radius:999px;padding:4px 13px;color:var(--muted);background:var(--panel2)}
 
+/* ---------- 访存对决动画 ---------- */
+.race-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px;margin-top:26px}
+.race-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.race-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.race-head .name{font-weight:800;font-size:16px}
+.race-head .pat{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.race-flex{display:flex;gap:16px;margin-top:14px;align-items:flex-start}
+.rgrid{display:grid;grid-template-columns:repeat(16,17px);gap:2px}
+.rcell{width:17px;height:17px;border-radius:4px;background:var(--bg2);border:1px solid var(--line);
+  transition:background .2s,border-color .2s}
+.rcell.used{background:rgba(148,163,184,.22)}
+.rcell.ptr{border-color:#fff;background:rgba(255,255,255,.25);z-index:2}
+.rcell.miss{background:rgba(248,113,113,.45)}
+.rcell.hit{background:rgba(74,222,128,.45)}
+.rcell.fetch{background:rgba(56,189,248,.35)}
+.rcache{display:flex;flex-direction:column;gap:6px;min-width:112px}
+.rc-t{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.rc-slot{height:34px;border:1px dashed rgba(148,163,184,.3);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);
+  font-size:12px;color:#5c7091;transition:.2s}
+.rc-slot.filled{border-style:solid;border-color:rgba(56,189,248,.45);color:#bae6fd;
+  background:rgba(56,189,248,.08)}
+.rc-slot.new{box-shadow:0 0 10px rgba(56,189,248,.25)}
+.rstats{margin-top:12px;font-family:var(--mono);font-size:12.5px;color:var(--muted);line-height:1.9}
+.rstats b{color:var(--text)}
+.rstats .bad{color:#f87171}
+.rstats .good{color:#4ade80}
+.race-ctrl{display:flex;gap:10px;align-items:center;margin-top:18px;flex-wrap:wrap}
+.race-end{display:none;margin-top:18px;border-radius:14px;padding:16px 20px;font-size:14.5px;
+  border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.07)}
+.race-end.show{display:block}
+.race-end b{color:var(--c5)}
+.foot-note{color:var(--muted);font-size:13px;margin-top:14px}
+
 /* ---------- 课程阅读器 ---------- */
 .reader{position:fixed;inset:0;z-index:50;display:none;background:rgba(5,8,18,.78);
   backdrop-filter:blur(6px)}
@@ -290,6 +324,60 @@ footer .mono{font-family:var(--mono)}
       <div class="big">67 → 10 → 33.6 GF/s</div>
     </div>
   </div>
+</section>
+
+<!-- ============ 访存对决动画 ============ -->
+<section id="race">
+  <div class="sec-head">
+    <div class="kick">ANIMATION · MEMORY</div>
+    <h2>动画：同样的计算，16 倍的搬运量</h2>
+    <p>两个面板做<b>完全相同的 256 次乘加</b>（一行 C × 矩阵 B，16×16），唯一区别是循环顺序：
+       v0 的内层沿 B 的列向下跳（每步跨 64B），v1 的内层沿行扫（一条 cache 行喂饱 16 次计算）。
+       每个面板配一个只装得下 4 行的 LRU cache 箱——看谁先把内存总线跑爆。</p>
+  </div>
+
+  <div class="race-wrap">
+    <div class="race-card">
+      <div class="race-head">
+        <span class="name" style="color:var(--c0)">v0 朴素 i-j-k</span>
+        <span class="pat">B[p][j]：p 递增 → 跳行</span>
+      </div>
+      <div class="race-flex">
+        <div class="rgrid" id="rgridA"></div>
+        <div class="rcache"><div class="rc-t">cache（LRU · 4 行）</div>
+          <div class="rc-slot" data-s="0"></div><div class="rc-slot" data-s="1"></div>
+          <div class="rc-slot" data-s="2"></div><div class="rc-slot" data-s="3"></div>
+        </div>
+      </div>
+      <div class="rstats" id="rstatsA"></div>
+    </div>
+    <div class="race-card">
+      <div class="race-head">
+        <span class="name" style="color:var(--c1)">v1 重排 i-p-j</span>
+        <span class="pat">B[p][j]：j 递增 → 扫行</span>
+      </div>
+      <div class="race-flex">
+        <div class="rgrid" id="rgridB"></div>
+        <div class="rcache"><div class="rc-t">cache（LRU · 4 行）</div>
+          <div class="rc-slot" data-s="0"></div><div class="rc-slot" data-s="1"></div>
+          <div class="rc-slot" data-s="2"></div><div class="rc-slot" data-s="3"></div>
+        </div>
+      </div>
+      <div class="rstats" id="rstatsB"></div>
+    </div>
+  </div>
+
+  <div class="race-ctrl">
+    <button class="kbtn" id="racePlay">▶ 播放</button>
+    <button class="kbtn" id="raceReset">重置</button>
+    <div class="seg" id="raceSpeed"></div>
+    <span class="hint" id="raceStep">第 0 / 256 步</span>
+  </div>
+
+  <div class="race-end" id="raceEnd"></div>
+  <p class="foot-note">注：动画假设矩阵远大于 cache（冷启动、只装 4 行）。实测里 256³ 的小矩阵整体躺在
+     cache 中，v0 也有 3.2 GF/s；到 2048³（B=16MB ≫ L2 1.25MB）才现出原形跌到 0.4 GF/s——
+     瓶颈随规模显形，这正是课程的主线。</p>
 </section>
 
 <!-- ============ 微内核动画 ============ -->
@@ -606,6 +694,134 @@ draw();
     step();
   };
   state();
+})();
+
+/* ---------- 访存对决动画（v0 vs v1）---------- */
+(function(){
+  const N = 16, CACHE_LINES = 4, TOTAL = N * N;
+  /* 访问序列存"行号"（一条 cache 行 = B 的一行 16 个 float = 64B）
+     v0 内层 p 递增 → 列序；v1 内层 j 递增 → 行序 */
+  const seqA = [], seqB = [];
+  for (let j = 0; j < N; j++) for (let p = 0; p < N; p++) seqA.push(p);
+  for (let p = 0; p < N; p++) for (let j = 0; j < N; j++) seqB.push(p);
+
+  function makePanel(gridId, statsId, seq, colOf){
+    const grid = document.getElementById(gridId);
+    const cells = [];
+    for (let r = 0; r < N; r++) {
+      cells.push([]);
+      for (let c = 0; c < N; c++) {
+        const d = document.createElement("div");
+        d.className = "rcell";
+        grid.appendChild(d);
+        cells[r].push(d);
+      }
+    }
+    const slots = [...grid.parentElement.querySelectorAll(".rc-slot")];
+    const cache = [];            /* LRU 序：头最旧 */
+    let step = 0, miss = 0, hit = 0, prevPtr = null;
+    const statsEl = document.getElementById(statsId);
+
+    function paintStats(){
+      const rate = step ? (hit / step * 100).toFixed(1) : "0.0";
+      statsEl.innerHTML =
+        `内存搬运 <b>${miss * 64}</b> B · 未中 <span class="bad">${miss}</span> · ` +
+        `命中 <span class="good">${hit}</span> · 命中率 <b>${rate}%</b>`;
+    }
+    function paintCache(newest){
+      slots.forEach((s, i) => {
+        const line = cache[i];
+        s.textContent = line === undefined ? "空" : `B 行 ${line}（64B）`;
+        s.classList.toggle("filled", line !== undefined);
+        s.classList.toggle("new", newest !== null && line === newest);
+      });
+    }
+    function stepOnce(){
+      if (step >= TOTAL) return true;
+      const r = seq[step], c = colOf(step);
+      const cell = cells[r][c];
+      if (prevPtr) prevPtr.classList.remove("ptr");
+      cell.classList.add("ptr", "used");
+      prevPtr = cell;
+      if (cache.indexOf(r) === -1) {          /* 未中：整行 64B 被搬进 cache */
+        miss++;
+        cell.classList.add("miss");
+        setTimeout(() => cell.classList.remove("miss"), 260);
+        for (let cc = 0; cc < N; cc++) {
+          const el = cells[r][cc];
+          el.classList.add("fetch");
+          setTimeout(() => el.classList.remove("fetch"), 300);
+        }
+        if (cache.length >= CACHE_LINES) cache.shift();  /* LRU 淘汰 */
+        cache.push(r);
+        paintCache(r);
+      } else {                                 /* 命中：提到 MRU */
+        hit++;
+        cache.splice(cache.indexOf(r), 1);
+        cache.push(r);
+        cell.classList.add("hit");
+        setTimeout(() => cell.classList.remove("hit"), 260);
+        paintCache(null);
+      }
+      step++;
+      paintStats();
+      return step >= TOTAL;
+    }
+    function reset(){
+      cache.length = 0; step = 0; miss = 0; hit = 0; prevPtr = null;
+      cells.flat().forEach(el => el.className = "rcell");
+      paintCache(null); paintStats();
+    }
+    reset();
+    return { stepOnce, reset, get step(){ return step; }, done: () => step >= TOTAL };
+  }
+
+  const A = makePanel("rgridA", "rstatsA", seqA, s => Math.floor(s / N));
+  const B = makePanel("rgridB", "rstatsB", seqB, s => s % N);
+
+  let timer = null, speed = 40;
+  const playBtn = document.getElementById("racePlay");
+  const stepEl = document.getElementById("raceStep");
+  const endEl = document.getElementById("raceEnd");
+
+  function ui(){ stepEl.textContent = `第 ${A.step} / 256 步`; }
+  function stop(){ if (timer) { clearInterval(timer); timer = null; playBtn.textContent = "▶ 播放"; } }
+  function tick(){
+    const d1 = A.stepOnce(), d2 = B.stepOnce();
+    ui();
+    if (d1 && d2) {
+      stop();
+      endEl.innerHTML = `⏱ 比赛结束：同样 <b>256</b> 次计算，v0 从内存搬了 <b>16384 B（16 KB）</b>——256 次访问全部未中；
+        v1 只搬 <b>1024 B（1 KB）</b>——16 次未中 + 240 次命中，<b>16 倍差距</b>。
+        真实矩阵上再叠加预取失效与 TLB 颠簸，这就是实测 2048³ 时 <b>0.4 vs 7.6 GF/s</b> 的来源。`;
+      endEl.classList.add("show");
+    }
+  }
+  function reset(){ stop(); A.reset(); B.reset(); ui(); endEl.classList.remove("show"); }
+
+  playBtn.onclick = function(){
+    if (timer) { stop(); return; }
+    if (A.done() && B.done()) reset();
+    this.textContent = "⏸ 暂停";
+    timer = setInterval(tick, speed);
+    tick();
+  };
+  document.getElementById("raceReset").onclick = reset;
+
+  (function(){
+    const el = document.getElementById("raceSpeed");
+    const opts = [["慢", 120], ["中", 40], ["快", 12]];
+    el.innerHTML = opts.map((o, i) =>
+      `<button class="${i === 1 ? "on" : ""}" data-v="${o[1]}">${o[0]}</button>`).join("");
+    el.onclick = e => {
+      const b = e.target.closest("button"); if (!b) return;
+      [...el.children].forEach(c => c.classList.remove("on"));
+      b.classList.add("on");
+      speed = +b.dataset.v;
+      if (timer) { stop(); playBtn.click(); }
+    };
+  })();
+  ui();
 })();
 
 /* ---------- 站内课程阅读器（零依赖迷你 Markdown 渲染）---------- */
