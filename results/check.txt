@@ -1,0 +1,22 @@
+实现         校验   用时(ms)      GFLOP/s 加速比
+== M=N=K=61  (单次运行 0.00 GFLOP) ==
+v0_naive       通过          0.1          5.5      1.0x
+v1_reorder     通过          0.1          6.2      1.1x
+v2_tiling      通过          0.1          4.6      0.8x
+v3_regblock    通过          0.0         22.0      4.0x
+v4_packing     通过          0.0         26.1      4.7x
+v5_openmp      通过          0.0         50.5      9.2x
+== M=N=K=260  (单次运行 0.04 GFLOP) ==
+v0_naive       通过         10.6          3.3      1.0x
+v1_reorder     通过          4.7          7.4      2.2x
+v2_tiling      通过          4.8          7.3      2.2x
+v3_regblock    通过          0.6         56.2     16.9x
+v4_packing     通过          0.7         53.1     16.0x
+v5_openmp      通过          0.1        237.2     71.4x
+== M=N=K=517  (单次运行 0.28 GFLOP) ==
+v0_naive       通过        102.7          2.7      1.0x
+v1_reorder     通过         35.3          7.8      2.9x
+v2_tiling      通过         35.4          7.8      2.9x
+v3_regblock    通过          6.1         45.2     16.8x
+v4_packing     通过          5.5         50.6     18.8x
+v5_openmp      通过          1.2        233.9     86.9x
