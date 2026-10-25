@@ -11,8 +11,7 @@
 2. Source 选 **Deploy from a branch**，分支 **main**，目录 **/docs**，保存
 3. 约一分钟后访问 `https://<用户名>.github.io/AI-operator/`
 
-网页顶部链接、源码卡片都指向 GitHub 仓库。若你的用户名不是 `ferey`，
-打开 `docs/index.html` 修改开头 `const REPO = "ferey/AI-operator"` 一行即可。
+网页顶部链接、源码卡片都指向 GitHub 仓库（`docs/index.html` 开头的 `const REPO` 一行控制，当前为 williamtymhuabian/AI-operator）。
 
 ## 快速开始
 
