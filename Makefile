@@ -5,9 +5,14 @@ CFLAGS  ?= -O2 -march=native -fopenmp -Wall -Wextra
 SRC     := src/common.c src/v0_naive.c src/v1_reorder.c src/v2_tiling.c \
            src/v3_regblock.c src/v4_packing.c src/v5_openmp.c src/benchmark.c
 
-.PHONY: all run check o3 cblas clean
+.PHONY: all run check o3 cblas site clean
 
 all: build/bench
+
+# 本地预览课程网页（docs/，即 GitHub Pages 发布的同一份文件）
+site:
+	python3 -m http.server 8000 -d docs
+	@echo "浏览器打开 http://127.0.0.1:8000"
 
 build/bench: $(SRC) | build
 	$(CC) $(CFLAGS) -Isrc $(SRC) -o $@ -lm

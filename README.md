@@ -3,7 +3,16 @@
 一个可以直接编译运行的"AI 算子优化"练手项目：从教科书式的朴素矩阵乘出发，
 逐步优化到 **约 680 倍加速**（本机实测），每一级对应课程的一课。
 
-配套课程：[COURSE.md](COURSE.md)
+配套课程：[COURSE.md](COURSE.md) · 课程展示页：[docs/index.html](docs/index.html)（本地 `make site` 预览，或发布到 GitHub Pages 后在线访问，见下方"发布网页"）
+
+## 发布网页（GitHub Pages）
+
+1. 把仓库推到 GitHub 后，打开仓库 **Settings → Pages**
+2. Source 选 **Deploy from a branch**，分支 **main**，目录 **/docs**，保存
+3. 约一分钟后访问 `https://<用户名>.github.io/AI-operator/`
+
+网页顶部链接、源码卡片都指向 GitHub 仓库。若你的用户名不是 `ferey`，
+打开 `docs/index.html` 修改开头 `const REPO = "ferey/AI-operator"` 一行即可。
 
 ## 快速开始
 
