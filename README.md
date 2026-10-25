@@ -12,7 +12,8 @@
 
 ![访存模式对决动画](docs/demo.gif)
 
-*生成脚本：[scripts/make_video.py](scripts/make_video.py)（`make video`），与网页内交互动画同一套模拟逻辑*
+*生成脚本：[scripts/make_video.py](scripts/make_video.py)（`make video`），与网页内交互动画同一套模拟逻辑；
+另有更小的 [demo.mp4](docs/demo.mp4)（1.1MB，适合手机/PPT 传输）*
 
 [![课程展示页](docs/screenshot.png)](https://williamtymhuabian.github.io/AI-operator/)
 
