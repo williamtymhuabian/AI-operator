@@ -5,13 +5,17 @@ CFLAGS  ?= -O2 -march=native -fopenmp -Wall -Wextra
 SRC     := src/common.c src/v0_naive.c src/v1_reorder.c src/v2_tiling.c \
            src/v3_regblock.c src/v4_packing.c src/v5_openmp.c src/benchmark.c
 
-.PHONY: all run check o3 cblas site sync clean
+.PHONY: all run check o3 cblas site sync video clean
 
 all: build/bench
 
 # 把根目录 COURSE.md 同步到 docs/（网页站内阅读器加载 docs/course.md；改课程后跑一次）
 sync:
 	cp COURSE.md docs/course.md
+
+# 重新生成课程动画视频 docs/demo.gif（需要 Pillow + Noto CJK 字体）
+video:
+	python3 scripts/make_video.py
 
 # 本地预览课程网页（docs/，即 GitHub Pages 发布的同一份文件）
 site:

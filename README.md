@@ -5,6 +5,15 @@
 
 配套课程：[COURSE.md](COURSE.md)（在线版可直接在[课程页](https://williamtymhuabian.github.io/AI-operator/)内阅读，无需跳转 GitHub）· 课程源文件改动后跑 `make sync` 同步到网页
 
+## 课程动画演示
+
+同样的 256 次乘加，只换循环顺序：v0 沿列跳行（每步浪费一条 cache 行）vs v1 沿行扫描
+（一条 cache 行喂 16 次计算）——16 倍的内存搬运差距，就是实测 21 倍加速的来源。
+
+![访存模式对决动画](docs/demo.gif)
+
+*生成脚本：[scripts/make_video.py](scripts/make_video.py)（`make video`），与网页内交互动画同一套模拟逻辑*
+
 [![课程展示页](docs/screenshot.png)](https://williamtymhuabian.github.io/AI-operator/)
 
 ## 快速开始
