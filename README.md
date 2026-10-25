@@ -3,15 +3,9 @@
 一个可以直接编译运行的"AI 算子优化"练手项目：从教科书式的朴素矩阵乘出发，
 逐步优化到 **约 680 倍加速**（本机实测），每一级对应课程的一课。
 
-配套课程：[COURSE.md](COURSE.md) · 课程展示页：[docs/index.html](docs/index.html)（本地 `make site` 预览，或发布到 GitHub Pages 后在线访问，见下方"发布网页"）
+配套课程：[COURSE.md](COURSE.md) · 在线课程页：**[williamtymhuabian.github.io/AI-operator](https://williamtymhuabian.github.io/AI-operator/)**（交互式基准图表、微内核动画；本地预览 `make site`）
 
-## 发布网页（GitHub Pages）
-
-1. 把仓库推到 GitHub 后，打开仓库 **Settings → Pages**
-2. Source 选 **Deploy from a branch**，分支 **main**，目录 **/docs**，保存
-3. 约一分钟后访问 `https://<用户名>.github.io/AI-operator/`
-
-网页顶部链接、源码卡片都指向 GitHub 仓库（`docs/index.html` 开头的 `const REPO` 一行控制，当前为 williamtymhuabian/AI-operator）。
+[![课程展示页](docs/screenshot.png)](https://williamtymhuabian.github.io/AI-operator/)
 
 ## 快速开始
 
