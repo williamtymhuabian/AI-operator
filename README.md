@@ -3,7 +3,7 @@
 一个可以直接编译运行的"AI 算子优化"练手项目：从教科书式的朴素矩阵乘出发，
 逐步优化到 **约 680 倍加速**（本机实测），每一级对应课程的一课。
 
-配套课程：[COURSE.md](COURSE.md) · 在线课程页：**[williamtymhuabian.github.io/AI-operator](https://williamtymhuabian.github.io/AI-operator/)**（交互式基准图表、微内核动画；本地预览 `make site`）
+配套课程：[COURSE.md](COURSE.md)（在线版可直接在[课程页](https://williamtymhuabian.github.io/AI-operator/)内阅读，无需跳转 GitHub）· 课程源文件改动后跑 `make sync` 同步到网页
 
 [![课程展示页](docs/screenshot.png)](https://williamtymhuabian.github.io/AI-operator/)
 
